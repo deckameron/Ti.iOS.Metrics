@@ -8,7 +8,7 @@ A Titanium iOS module that provides accurate measurements of iOS UI elements inc
 
 - Status bar height (including Dynamic Island and notch)
 - Navigation bar height (correctly detects bars within tab controllers)
-- Tab bar height (supports iOS 18+ floating tab bar)
+- Tab bar height
 - Safe area insets (top, bottom, left, right)
 - Screen dimensions
 - Device type and orientation detection
@@ -67,6 +67,17 @@ Returns a dictionary containing all UI measurements.
 Returns detailed information about the view controller hierarchy. Useful for troubleshooting.
 
 **Returns:** `Object`
+
+```javascript
+{
+  "rootVCClass": "TiRootViewController",
+  "safeAreaInsets": "{62, 0, 34, 0}",
+  "hasWindow": 1,
+  "windowFrame": "{{0, 0}, {440, 956}}",
+  "hasRootVC": 1,
+  "windowBounds": "{{0, 0}, {440, 956}}"
+}
+```
 
 ## Usage Examples
 
