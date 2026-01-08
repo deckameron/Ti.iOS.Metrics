@@ -1,101 +1,246 @@
-# Titanium SDK Module Project
+# Ti.iOS.Metrics
 
-This is a skeleton Titanium Mobile Mobile module project.
+A Titanium iOS module that provides accurate measurements of iOS UI elements including status bar, navigation bar, tab bar, and safe area insets. Supports all iPhone and iPad models, including devices with Dynamic Island, notch, and the new floating tab bar design.
 
-## Module Naming
+![Titanium](https://img.shields.io/badge/Titanium-13.0+-red.svg) ![Platform](https://img.shields.io/badge/platform-iOS-lightgrey.svg) ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Maintained](https://img.shields.io/badge/Maintained-Yes-green.svg)
 
-Choose a unique module id for your module.  This ID usually follows a namespace
-convention using DNS notation.  For example, com.appcelerator.module.test.  This
-ID can only be used once by all public modules in Titanium.
+## Features
 
-## Getting Started
+- Status bar height (including Dynamic Island and notch)
+- Navigation bar height (correctly detects bars within tab controllers)
+- Tab bar height (supports iOS 18+ floating tab bar)
+- Safe area insets (top, bottom, left, right)
+- Screen dimensions
+- Device type and orientation detection
+- iOS version detection
 
-1. Edit the `manifest` with the appropriate details about your module.
-2. Edit the `LICENSE` to add your license details.
-3. Place any assets (such as PNG files) that are required anywhere in the module folder.
-4. Edit the `timodule.xml` and configure desired settings.
-5. Code and build.
+## Requirements
 
-## Documentation
------------------------------
+- Titanium SDK 13.0.0+
 
-You should provide at least minimal documentation for your module in `documentation` folder using the Markdown syntax.
+## Installation
 
-For more information on the Markdown syntax, refer to this documentation at:
+### 1. Copy the module to your Titanium project
 
-<http://daringfireball.net/projects/markdown/>
+```bash
+# Copy the compiled module to:
+{YOUR_PROJECT}/modules/iphone/
+```
 
-## Example
+### 2. Add to tiapp.xml
 
-The `example` directory contains a skeleton application test harness that can be
-used for testing and providing an example of usage to the users of your module.
-
-## Building
-
-Simply run `ti build -p [ios|android] --build-only` which will compile and package your module.
-
-## Linting
-
-You can use `clang` to lint your code. A default linting style is included inside the module main folder.
-Run `clang-format -style=file -i SRC_FILE` in the module root to lint the `SRC_FILE`. You can also patterns,
-like `clang-format -style=file -i Classes/*`
-
-## Install
-
-To use your module locally inside an app you can copy the zip file into the app root folder and compile your app.
-The file will automatically be extracted and copied into the correct `modules/` folder.
-
-If you want to use your module globally in all your apps you have to do the following:
-
-### macOS
-
-Copy the distribution zip file into the `~/Library/Application Support/Titanium` folder
-
-### Linux
-
-Copy the distribution zip file into the `~/.titanium` folder
-
-### Windows
-Copy the distribution zip file into the `C:\ProgramData\Titanium` folder
-
-## Project Usage
-
-Register your module with your application by editing `tiapp.xml` and adding your module.
-Example:
-
+```xml
 <modules>
-  <module version="1.0.0">ti.ios.metrics</module>
+    <module platform="iphone">ti.ios.metrics</module>
 </modules>
-
-When you run your project, the compiler will combine your module along with its dependencies
-and assets into the application.
-
-## Example Usage
-
-To use your module in code, you will need to require it.
-
-### ES6+ (recommended)
-
-```js
-import MyModule from 'ti.ios.metrics';
-MyModule.foo();
 ```
 
-### ES5
+## API Documentation
 
-```js
-var MyModule = require('ti.ios.metrics');
-MyModule.foo();
+### Methods
+
+#### getHeights()
+
+Returns a dictionary containing all UI measurements.
+
+**Returns:** `Object`
+```javascript
+{
+    statusBar: Number,           // Status bar height in points
+    navigationBar: Number,       // Navigation bar height in points
+    tabBar: Number,             // Tab bar height in points
+    safeAreaTop: Number,        // Top safe area inset
+    safeAreaBottom: Number,     // Bottom safe area inset
+    safeAreaLeft: Number,       // Left safe area inset
+    safeAreaRight: Number,      // Right safe area inset
+    screenWidth: Number,        // Screen width in points
+    screenHeight: Number,       // Screen height in points
+    isLandscape: Boolean,       // True if device is in landscape
+    isStatusBarHidden: Boolean, // True if status bar is hidden
+    deviceType: String,         // "iPhone" or "iPad"
+    iosVersion: Number          // iOS version (e.g., 17.0)
+}
 ```
 
-## Testing
+#### debug()
 
-To test your module with the example, use:
+Returns detailed information about the view controller hierarchy. Useful for troubleshooting.
 
-```js
-ti build -p [ios|android]
+**Returns:** `Object`
+
+## Usage Examples
+
+### Basic Usage
+```javascript
+const metrics = require('ti.ui.metrics');
+
+function updateLayout() {
+    const m = metrics.getHeights();
+    
+    console.log('Status Bar Height:', m.statusBar);
+    console.log('Navigation Bar Height:', m.navigationBar);
+    console.log('Tab Bar Height:', m.tabBar);
+    console.log('Safe Area Top:', m.safeAreaTop);
+    console.log('Safe Area Bottom:', m.safeAreaBottom);
+}
+
+// Call when needed
+updateLayout();
 ```
 
-This will execute the app.js in the example/ folder as a Titanium application.
+### Calculate Usable Screen Height
+```javascript
+const metrics = require('ti.ui.metrics');
 
-Code strong!
+function getUsableHeight() {
+    const m = metrics.getHeights();
+    
+    const usableHeight = m.screenHeight 
+        - m.safeAreaTop 
+        - m.safeAreaBottom 
+        - m.navigationBar 
+        - m.tabBar;
+    
+    return usableHeight;
+}
+
+const contentHeight = getUsableHeight();
+console.log('Available content height:', contentHeight);
+```
+
+### Responsive Layout with Orientation Changes
+```javascript
+const metrics = require('ti.ui.metrics');
+
+function adjustLayout() {
+    const m = metrics.getHeights();
+    
+    // Adjust view based on orientation
+    if (m.isLandscape) {
+        myView.height = m.screenHeight - m.safeAreaTop - m.safeAreaBottom;
+        myView.top = m.safeAreaTop;
+    } else {
+        myView.height = m.screenHeight - m.safeAreaTop - m.safeAreaBottom - m.navigationBar;
+        myView.top = m.safeAreaTop + m.navigationBar;
+    }
+}
+
+// Listen for orientation changes
+Ti.Gesture.addEventListener('orientationchange', adjustLayout);
+
+// Initial layout
+adjustLayout();
+```
+
+### Position View Above Tab Bar
+```javascript
+const metrics = require('ti.ui.metrics');
+
+const m = metrics.getHeights();
+
+const floatingButton = Ti.UI.createButton({
+    title: 'Action',
+    width: 200,
+    height: 50,
+    bottom: m.tabBar + 20  // 20pt above tab bar
+});
+```
+
+### Adaptive Header Height
+```javascript
+const metrics = require('ti.ui.metrics');
+
+function createHeader() {
+    const m = metrics.getHeights();
+    
+    const header = Ti.UI.createView({
+        top: 0,
+        height: m.safeAreaTop + m.navigationBar,
+        backgroundColor: '#007AFF'
+    });
+    
+    const title = Ti.UI.createLabel({
+        text: 'My App',
+        top: m.safeAreaTop,
+        height: m.navigationBar,
+        textAlign: 'center',
+        color: '#fff'
+    });
+    
+    header.add(title);
+    return header;
+}
+```
+
+### Check Device Capabilities
+```javascript
+const metrics = require('ti.ui.metrics');
+
+const m = metrics.getHeights();
+
+// Check if device has notch/Dynamic Island
+const hasNotch = m.safeAreaTop > 20;
+
+// Check if device has home indicator
+const hasHomeIndicator = m.safeAreaBottom > 0;
+
+// Adjust UI accordingly
+if (hasNotch) {
+    console.log('Device has notch or Dynamic Island');
+}
+
+if (hasHomeIndicator) {
+    console.log('Device has home indicator (no home button)');
+}
+```
+
+### Full Screen Content with Safe Areas
+```javascript
+const metrics = require('ti.ui.metrics');
+
+const m = metrics.getHeights();
+
+const contentView = Ti.UI.createScrollView({
+    contentHeight: 'auto',
+    top: m.safeAreaTop + m.navigationBar,
+    bottom: m.safeAreaBottom + m.tabBar,
+    left: m.safeAreaLeft,
+    right: m.safeAreaRight
+});
+```
+
+## Troubleshooting
+
+### Navigation Bar or Tab Bar returns 0
+
+If you're getting 0 for navigation or tab bar heights, ensure you're calling `getHeights()` after the UI is fully laid out:
+```javascript
+// Wait for window to open
+win.addEventListener('open', function() {
+    setTimeout(function() {
+        const metrics = require('ti.ui.metrics');
+        const m = metrics.getHeights();
+        console.log(m);
+    }, 100);
+});
+```
+
+### Using the debug() method
+
+If you're experiencing issues, use the `debug()` method to see the view controller hierarchy:
+```javascript
+const metrics = require('ti.ui.metrics');
+const debugInfo = metrics.debug();
+console.log(JSON.stringify(debugInfo, null, 2));
+```
+
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
