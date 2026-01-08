@@ -1,0 +1,19 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0.0
+apiversion: 2
+architectures: arm64 x86_64
+mac: false
+description: Ti.iOS.Metrics
+author: Douglas Alves
+license: Specify your license
+copyright: Copyright (c) 2026 by Your Company
+
+# these should not be edited
+name: Ti.iOS.Metrics
+moduleid: ti.ios.metrics
+guid: b10a8c4e-21eb-4703-9367-01d2411d56dd
+platform: iphone
+minsdk: 13.0.0.GA
