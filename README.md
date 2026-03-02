@@ -83,7 +83,7 @@ Returns detailed information about the view controller hierarchy. Useful for tro
 
 ### Basic Usage
 ```javascript
-const metrics = require('ti.ui.metrics');
+const metrics = require('ti.ios.metrics');
 
 function updateLayout() {
     const m = metrics.getHeights();
@@ -101,7 +101,7 @@ updateLayout();
 
 ### Calculate Usable Screen Height
 ```javascript
-const metrics = require('ti.ui.metrics');
+const metrics = require('ti.ios.metrics');
 
 function getUsableHeight() {
     const m = metrics.getHeights();
@@ -121,7 +121,7 @@ console.log('Available content height:', contentHeight);
 
 ### Responsive Layout with Orientation Changes
 ```javascript
-const metrics = require('ti.ui.metrics');
+const metrics = require('ti.ios.metrics');
 
 function adjustLayout() {
     const m = metrics.getHeights();
@@ -145,7 +145,7 @@ adjustLayout();
 
 ### Position View Above Tab Bar
 ```javascript
-const metrics = require('ti.ui.metrics');
+const metrics = require('ti.ios.metrics');
 
 const m = metrics.getHeights();
 
@@ -159,7 +159,7 @@ const floatingButton = Ti.UI.createButton({
 
 ### Adaptive Header Height
 ```javascript
-const metrics = require('ti.ui.metrics');
+const metrics = require('ti.ios.metrics');
 
 function createHeader() {
     const m = metrics.getHeights();
@@ -185,7 +185,7 @@ function createHeader() {
 
 ### Check Device Capabilities
 ```javascript
-const metrics = require('ti.ui.metrics');
+const metrics = require('ti.ios.metrics');
 
 const m = metrics.getHeights();
 
@@ -207,7 +207,7 @@ if (hasHomeIndicator) {
 
 ### Full Screen Content with Safe Areas
 ```javascript
-const metrics = require('ti.ui.metrics');
+const metrics = require('ti.ios.metrics');
 
 const m = metrics.getHeights();
 
@@ -229,7 +229,7 @@ If you're getting 0 for navigation or tab bar heights, ensure you're calling `ge
 // Wait for window to open
 win.addEventListener('open', function() {
     setTimeout(function() {
-        const metrics = require('ti.ui.metrics');
+        const metrics = require('ti.ios.metrics');
         const m = metrics.getHeights();
         console.log(m);
     }, 100);
@@ -240,7 +240,7 @@ win.addEventListener('open', function() {
 
 If you're experiencing issues, use the `debug()` method to see the view controller hierarchy:
 ```javascript
-const metrics = require('ti.ui.metrics');
+const metrics = require('ti.ios.metrics');
 const debugInfo = metrics.debug();
 console.log(JSON.stringify(debugInfo, null, 2));
 ```
