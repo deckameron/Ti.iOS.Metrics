@@ -1,24 +1,24 @@
 
-1/8/2026, 4:26:14 PM
+9/3/2026, 1:14:51 PM
 
 Operating System
   Name                        = macOS
-  Version                     = 26.1
+  Version                     = 26.6.2
   Architecture                = 64-bit
   # CPUs                      = 10
-  Memory                      = 68719476736
+  Memory                      = 64.0GB
 
 Node.js
-  Node.js Version             = 20.18.1
-  npm Version                 = 10.8.2
+  Node.js Version             = 22.18.0
+  npm Version                 = 10.9.3
 
 Titanium CLI
-  CLI Version                 = 8.1.2
+  CLI Version                 = 8.1.4
 
 Titanium SDK
-  SDK Version                 = 13.0.1.GA
-  SDK Path                    = /Users/douglas/Library/Application Support/Titanium/mobilesdk/osx/13.0.1.GA
+  SDK Version                 = 13.4.1.GA
+  SDK Path                    = /Users/jasondavidmiller/Library/Application Support/Titanium/mobilesdk/osx/13.4.1.GA
   Target Platform             = iphone
 
 Command
-  /Users/douglas/.nvm/versions/node/v20.18.1/bin/node /Users/douglas/.nvm/versions/node/v20.18.1/bin/ti build -p ios --build-only
+  /Users/jasondavidmiller/.nvm/versions/node/v22.18.0/bin/node /Users/jasondavidmiller/.nvm/versions/node/v22.18.0/bin/ti build -p ios --build-only --target simulator --project-dir /Users/jasondavidmiller/Documents/Titanium Modules Workspace/Ti.iOS.Metrics/ios --sdk 13.4.1.GA --no-prompt --no-banner --log-level info
