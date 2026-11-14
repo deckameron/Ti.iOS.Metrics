@@ -31,3 +31,7 @@ DerivedData/
 build/
 *.dSYM.zip
 *.snapshot
+
+# Module build output
+ios/build/
+ios/dist/
