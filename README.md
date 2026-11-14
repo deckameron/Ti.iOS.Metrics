@@ -14,6 +14,7 @@ A Titanium iOS module that provides accurate measurements of iOS UI elements inc
 - Size classes (compact / regular)
 - Reserved regions for the fold and camera areas of iPhone Duo (iOS 27.1+)
 - iPhone Duo detection
+- Display corner radius for known iPhone and iPad models
 - Device type, orientation and iOS version detection
 
 ## Requirements
@@ -42,6 +43,27 @@ A Titanium iOS module that provides accurate measurements of iOS UI elements inc
 ## API Documentation
 
 ### Methods
+
+#### getDisplayCornerRadius()
+
+Returns the physical display corner radius in points for known iPhone and iPad models. This method is synchronous and does not require an open window.
+
+**Returns:** `Number`
+
+- Returns the known radius for a supported model.
+- Returns `0` for a known device with a square display.
+- Returns `0` for an unknown model so it can be used safely as a Titanium `borderRadius` fallback. Check `displayCornerRadiusKnown` from `getHeights()` when the distinction matters.
+
+This API uses a model lookup and does not access Apple's private `_displayCornerRadius` API.
+
+```javascript
+const metrics = require('ti.ios.metrics');
+
+const radius = metrics.getDisplayCornerRadius();
+const view = Ti.UI.createView({
+    borderRadius: radius
+});
+```
 
 #### getHeights()
 
@@ -89,7 +111,13 @@ Returns a dictionary containing all UI measurements. All values are in points.
     isLandscape: Boolean,        // true when the window is wider than it is tall
     isStatusBarHidden: Boolean,
     deviceType: String,          // "iPhone" or "iPad"
-    iosVersion: Number           // e.g. 27.1
+    iosVersion: Number,          // e.g. 27.1
+
+    // Display corners (known iPhone and iPad models)
+    displayCornerRadius: Number,       // Physical display radius in points
+    displayCornerRadiusKnown: Boolean, // true when the model is in the lookup
+    displayCornerRadiusSource: String, // "modelLookup" or "unavailable"
+    displayCornerCurve: String         // "continuous", "square" or "unknown"
 }
 ```
 
@@ -204,6 +232,7 @@ function updateLayout() {
     console.log('Safe Area Top:', m.safeAreaTop);
     console.log('Safe Area Bottom:', m.safeAreaBottom);
     console.log('Window:', m.windowWidth + 'x' + m.windowHeight);
+    console.log('Display Corner Radius:', m.displayCornerRadius);
 }
 
 updateLayout();
@@ -435,6 +464,39 @@ const contentView = Ti.UI.createScrollView({
     right: Math.max(m.safeAreaRight, tab.edge === 'right' ? tab.thickness : 0)
 });
 ```
+
+### Match a View to the Display Corners
+
+```javascript
+const metrics = require('ti.ios.metrics');
+const m = metrics.getHeights();
+
+const backgroundView = Ti.UI.createView({
+    width: Ti.UI.FILL,
+    height: Ti.UI.FILL,
+    backgroundColor: '#fff',
+    borderRadius: m.displayCornerRadiusKnown ? m.displayCornerRadius : 0
+});
+```
+
+The returned value is expressed in Apple points, which are equivalent to Titanium density-independent pixels on iOS. It is best suited to a view that follows the display edges. For an evenly inset view, a concentric circular approximation is `Math.max(m.displayCornerRadius - inset, 0)`.
+
+Modern iPhone and iPad displays use a continuous corner curve, while Titanium's `borderRadius` is currently documented as a circular arc. The numeric radius is therefore an approximation when applied directly to a standard Titanium view. Native iOS 26 concentric-corner support is planned as a separate view-focused API.
+
+### Unknown Devices
+
+New Apple hardware may not be present in the bundled model lookup. In that case:
+
+- `displayCornerRadius` and `getDisplayCornerRadius()` return `0`.
+- `displayCornerRadiusKnown` is `false`.
+- `displayCornerRadiusSource` is `"unavailable"`.
+- `displayCornerCurve` is `"unknown"`.
+
+The lookup can be updated without changing the JavaScript API.
+
+## Display Geometry Data
+
+The model lookup is adapted from BezelKit's simulator-derived device database. See the [third-party notices](ios/documentation/third-party-notices.md) for attribution and license information.
 
 ## Migrating from Previous Versions
 

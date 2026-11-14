@@ -2,14 +2,14 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 1.0.0
+version: 1.1.0
 apiversion: 2
 architectures: arm64 x86_64
 mac: false
 description: Ti.iOS.Metrics
 author: Douglas Alves
-license: Specify your license
-copyright: Copyright (c) 2026 by Your Company
+license: MIT
+copyright: Copyright (c) 2026 Douglas Alves
 
 # these should not be edited
 name: Ti.iOS.Metrics

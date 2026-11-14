@@ -1,24 +1,24 @@
 
-1/8/2026, 4:26:14 PM
+11/14/2026, 6:28:46 PM
 
 Operating System
   Name                        = macOS
-  Version                     = 26.1
+  Version                     = 27.0.1
   Architecture                = 64-bit
   # CPUs                      = 10
-  Memory                      = 68719476736
+  Memory                      = 64.0GB
 
 Node.js
-  Node.js Version             = 20.18.1
-  npm Version                 = 10.8.2
+  Node.js Version             = 22.23.2
+  npm Version                 = 10.9.8
 
 Titanium CLI
-  CLI Version                 = 8.1.2
+  CLI Version                 = 9.1.0
 
 Titanium SDK
-  SDK Version                 = 13.0.1.GA
-  SDK Path                    = /Users/douglas/Library/Application Support/Titanium/mobilesdk/osx/13.0.1.GA
+  SDK Version                 = 13.4.1.GA
+  SDK Path                    = /Users/douglas/Library/Application Support/Titanium/mobilesdk/osx/13.4.1.GA
   Target Platform             = iphone
 
 Command
-  /Users/douglas/.nvm/versions/node/v20.18.1/bin/node /Users/douglas/.nvm/versions/node/v20.18.1/bin/ti build -p ios --build-only
+  /Users/douglas/.nvm/versions/node/v22.23.2/bin/node /Users/douglas/.nvm/versions/node/v22.23.2/bin/ti build -p ios --build-only --sdk 13.4.1.GA --no-prompt --no-banner
